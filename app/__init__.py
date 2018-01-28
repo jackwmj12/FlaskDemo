@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_moment import Moment
@@ -11,7 +11,7 @@ mail = Mail()
 moment = Moment()
 login_manager = LoginManager()                  # 创建登陆管理
 login_manager.session_protection = "strong"     # 设定保护等级
-login_manager.login_view = "main.login_menu"    # 添加登陆界面，放在view层
+login_manager.login_view = "auth.login_menu"    # 添加登陆界面，放在view层
 db = MongoEngine()
 
 def create_app(config_name):#创建APP
@@ -26,4 +26,6 @@ def create_app(config_name):#创建APP
     # attach routes and custom error pages here
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)       # 初始化蓝图
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint,url_prefix = "/auth")
     return app

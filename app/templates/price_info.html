@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
 {% block menu %}
 <div id="tooplate_menu">
             <ul>
@@ -25,9 +27,16 @@
 {% block main %}
      <link rel="stylesheet" href="{{ url_for("static",filename = "css/main_content.css") }}">
     <body>
-    <div class="main-content">
-{#        {% if {{current_user.confirmed}} %}#}
-        欢迎来到Index界面
-    </div>
+        <div class="main-content">
+            /时间/铜价/铜价变化/铝价/铝价变化/链接/
+            {% for item in price_infos %}
+                /{{ item.date }}/{{ item.coper_price }}/{{ item.coper_changed }}/{{ item.aluminium_price }}/{{ item.aluminium_changed }}//{{ item.url }}
+            {% endfor %}
+            <div class="pagination">
+                {% if pagination %}
+                    {{ macros.pagination_widget(pagination, 'main.get_coper_price') }}
+                {% endif %}
+            </div>
+        </div>
     </body>
 {% endblock %}

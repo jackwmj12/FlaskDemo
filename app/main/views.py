@@ -1,106 +1,65 @@
-from flask import render_template,redirect,url_for,session,request,flash
+from flask import render_template,redirect,url_for,session,request,flash,current_app
 from . import main
-from flask_login import login_required,login_user,logout_user
-from ..auth.forms import LoginForm
-from ..models import User
+from flask_login import login_required
+from ..models import OderawayStatus,Ip,PriceInfo
+from flask import jsonify
 
 @main.route("/index")
 @main.route("/")
 def index():
-    content = {
-        "username":"LCC",
-        "password":"123",
-        "age":"15",
-        "gender":"male",
-        "frind":{
-            "name":"SLS",
-            "age":28,
-            "gender":"fmale",
-        }
-    }
-    return render_template("index.html",**content)
+    return render_template("index.html")
 
 @main.route("/main")
 def main_menu():
-    content = {
-        "username": "LCC",
-        "password": "123",
-        "age": "15",
-        "gender": "male",
-        "frind": {
-            "name": "SLS",
-            "age": 28,
-            "gender": "fmale",
-        }
-    }
-    return render_template("main.html",**content)
+    return render_template("main.html")
 
 @main.route("/product")
 def product():
-    content = {
-        "username": "LCC",
-        "password": "123",
-        "age": "15",
-        "gender": "male",
-        "frind": {
-            "name": "SLS",
-            "age": 28,
-            "gender": "fmale",
-        }
-    }
-    return render_template("product.html",**content)
+    return render_template("product.html")
 
 @main.route("/download")
 @login_required
 def download():
-    content = {
-        "username": "",
-        "password": "",
-        "age": "",
-        "gender": "",
-    }
-    return render_template("download.html",**content)
+    # page = request.args.get("page",1,type = int)
+    # pagination = OderawayStatus.objects.order_by(OderawayStatus.Time,
+    #                 per_page = current_app.config["FLASKY_POSTS_PER_PAGE"],
+    #                 error_out =False)
+    # oderstatus = pagination.items
+    return render_template("download.html")
 
 @main.route("/about")
 def about():
-    content = {
-        "username": "LCC",
-        "password": "123",
-        "age": "15",
-        "gender": "male",
-        "frind": {
-            "name": "SLS",
-            "age": 28,
-            "gender": "fmale",
-        }
-    }
-    return render_template("about.html",**content)
-
-@main.route("/login",methods = ["GET","POST"])
-def login_menu():
-    content = {
-        "username": "",
-        "password": "",}
-    form = LoginForm()  # 创建表单对象
-    if form.validate_on_submit():  # 如果表单提交
-        user = User.objects(username= form.username.data).first()#从数据库获取相应用户信息
-        if user is not None and user.verify_password(form.password.data):#验证密码
-            print("登陆成功")
-            login_user(user,form.remember_me.data)#登陆用户
-            return redirect(request.args.get("next") or url_for("main.index"))#重定向链接
-        flash("用户名或密码错误")#用户名密码错误
-    import datetime
-    content["username"] = form.username.data
-    return render_template("login.html", form=form, current_time=datetime.datetime.utcnow())
-
-@main.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('main.login_menu'))
-
+    return render_template("about.html")
 
 @main.route("/alert")
 def alert():
     return render_template("alert.html")
 
+@main.route("/ip")
+def get_ip():
+    ip_content = Ip.objects(index = "0").first()
+    return ip_content.ip.split("\n")[0]
+
+@main.route("/coper_price")
+@login_required
+def get_coper_price():
+    page = request.args.get("page",1,type = int)
+    pagination = PriceInfo.objects().paginate(page=page,per_page=current_app.config["PRICE_PER_PAGE"],error_out=False)
+    price_infos = pagination.items
+    return render_template("price_info.html",price_infos = price_infos,pagination = pagination)
+
+@main.route("/coper_price_jason")
+@login_required
+def get_coper_price_jason():
+    data_list = []
+    page = request.args.get("page",1,type = int)
+    pagination = PriceInfo.objects().paginate(page=page,per_page=current_app.config["PRICE_PER_PAGE"],error_out=False)
+    price_infos = pagination.items
+    for item in price_infos:
+        data_list.append(item.to_dict())
+    return str(data_list)
+
+@main.route("/newlogin")
+# @login_required
+def newlogin():
+    return render_template("newlogin.html")

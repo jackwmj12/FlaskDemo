@@ -1,21 +1,19 @@
-from flask import Flask
-import os
-# import ip_acquire
-from flask_mail import Message,Mail
+from init import create_app,Manager,Migrate,db,MigrateCommand
+from flask_mail import Mail,Message
+from flask import render_template
 
-app = Flask(__name__)
+app = create_app("default")
 mail = Mail(app)
-# ...
-app.config['MAIL_SERVER'] = 'smtp.qq.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] ="343563813@qq.com"
-app.config['MAIL_PASSWORD'] = 'biycszevokgfbhci'
-# app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
-# app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+manager = Manager(app)
+# migrate = Migrate(app,db)
+# manager.add_command("db",MigrateCommand)
 
-msg = Message('test subject', sender='343563813@qq.com', recipients=['joe.lin@oderaway.com'])
-msg.body = 'text body'
-msg.html = '<b>HTML</b> body'
-with app.app_context():
+def send_mail(to,subject,template,**kwargs):
+    msg = Message(app.config['FLASKY_MAIL_SUBJECT_PREFIX'] + subject,
+                  sender=app.config['FLASKY_MAIL_SENDER'], recipients=[to])
+    msg.body = render_template(template + '.txt', **kwargs)
+    msg.html = render_template(template + '.html', **kwargs)
     mail.send(msg)
+
+if __name__=='__main__':
+    manager.run()

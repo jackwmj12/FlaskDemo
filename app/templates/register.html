@@ -7,8 +7,8 @@
 {% block menu %}
 <div id="tooplate_menu">
             <ul>
-                <li class = "last"><a href="../index" class="current">主页</a></li>
-{#                <li class="last"><a href="register">注册</a></li>#}
+                <li><a href="../index" class="current">主页</a></li>
+                <li><a href="/login" class ="current">登陆</a></li>
             </ul>
         </div> <!-- end of tooplate_menu -->
 {% endblock %}
@@ -21,18 +21,12 @@
             </div>
         {% endfor %}
     </div>
-{#    {% endif %}#}
 {% endblock %}
 {% block main %}
      <link rel="stylesheet" href="{{ url_for("static",filename = "css/main_content.css") }}">
     <body>
     <div class="main-content">
         {{ wtf.quick_form(form) }}
-        <p>
-            <a href="{{ url_for("auth.register_menu") }}">
-                点击此处注册新用户
-            </a>
-        </p>
     </div>
     </body>
 {% endblock %}
