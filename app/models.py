@@ -10,12 +10,16 @@ def load_user(user_id):
     return User.objects(id = user_id).first()
 
 class User(UserMixin,db.Document):
-    meta = {'collection': 'TestAccount'}
+    meta = {'collection': 'OderawayAccount'}
     username = db.StringField(unique = True)
     password_hash = db.StringField()
     phonenum = db.StringField()
     email = db.StringField(unique = True)
     confirmed = db.BooleanField(default = False)
+    role = db.StringField(default="")
+    dis_authenticated = True
+    is_active = True
+    is_anonymous = False
 
     @property
     def password(self):
@@ -24,15 +28,6 @@ class User(UserMixin,db.Document):
     @password.setter                                                                        # 当password设置时，触发以下函数
     def password(self, password):
         self.password_hash = generate_password_hash(password=password)
-
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return self.confirmed
-
-    def is_anonymous(self):
-        return False
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash,str(password))                        # 返回检查结果
@@ -61,9 +56,42 @@ class User(UserMixin,db.Document):
         self.save()
         return True
 
+class Oderawayequipments(db.Document):
+	meta = {
+		'collection': 'OderawayConfig',
+		'ordering': ['SerialNum']
+	}
+	Description = db.StringField()
+	SerialNum = db.StringField()
+	WorkMode = db.StringField()
+	a = db.StringField()
+	b = db.StringField()
+	MonStart = db.StringField()
+	MonEnd = db.StringField()
+	TueStart = db.StringField()
+	TueEnd = db.StringField()
+	WedStart = db.StringField()
+	WedEnd = db.StringField()
+	ThursStart = db.StringField()
+	ThursEnd = db.StringField()
+	FriStart = db.StringField()
+	FriEnd = db.StringField()
+	SatStart = db.StringField()
+	SatEnd = db.StringField()
+	SunStart = db.StringField()
+	SunEnd = db.StringField()
+	SmartStart = db.StringField()
+	SmartStop = db.StringField()
+	AllFre = db.StringField()
+	WorkFre = db.StringField()
+	WorkLimit = db.StringField()
+	ConfigDate = db.StringField()
+
 class OderawayStatus(db.Document):
-    meta = {'collection': '',
-            'ordering': ['Time']}
+    meta = {
+        'collection': '',
+        'ordering': ['Time']
+    }
     WorkFre = db.StringField()
     NH3 = db.StringField()
     WorkStatus = db.StringField()
