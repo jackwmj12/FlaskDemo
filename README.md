@@ -2,6 +2,7 @@
 
 缺少一个config文件，可以根据自己实际需求填写config文件
    内容如下：
+````
 config.py
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -49,5 +50,5 @@ config = {
     'production': ProductionConfig,
     'default': DevelopmentConfig
 }
-
+````
 
