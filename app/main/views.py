@@ -1,7 +1,7 @@
 from flask import render_template,redirect,url_for,session,request,flash,current_app
 from . import main
 from flask_login import login_required
-from ..models import OderawayStatus,Ip,PriceInfo
+from ..models import OderawayStatus,Ip,PriceInfo,User
 from flask import jsonify
 
 @main.route("/index")
@@ -58,8 +58,3 @@ def get_coper_price_jason():
     for item in price_infos:
         data_list.append(item.to_dict())
     return str(data_list)
-
-@main.route("/newlogin")
-# @login_required
-def newlogin():
-    return render_template("newlogin.html")

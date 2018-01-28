@@ -7,7 +7,7 @@ from ..models import User
 class LoginForm(FlaskForm):
     username = StringField("登陆邮箱",validators=[Required(),Email(),length(1,64)])
     password = PasswordField("登陆密码",validators = [Required()])
-    remember_me = BooleanField("保持登陆")
+    # remember_me = BooleanField("保持登陆")
     submit_login = SubmitField("登陆")
 
 class RegistrationForm(FlaskForm):

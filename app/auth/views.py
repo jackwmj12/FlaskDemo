@@ -17,23 +17,41 @@ def register_menu():
         send_email(user.email,"激活你的账户","auth/email/confirm",user=user,token=token)
         flash("尊敬的用户，激活链接已发送至您的邮箱:{}".format(user.email))
         return redirect(url_for("auth.login_menu"))
-    return render_template("register.html",form = form)
+    # return render_template("register.html",form = form)
+    return render_template("newregister.html",form = form)
+# @auth.route("/login",methods = ["GET","POST"])
+# def login_menu():
+#     content = {
+#         "username": "",
+#         "password": "",}
+#     form = LoginForm()  # 创建表单对象
+#     if form.validate_on_submit():  # 如果表单提交
+#         user = User.objects(email = form.username.data).first()#从数据库获取相应用户信息
+#         if user is not None and user.verify_password(form.password.data):#验证密码
+#             login_user(user,form.remember_me.data)#登陆用户
+#             return redirect(request.args.get("next") or url_for("main.index"))#重定向链接
+#         flash("用户名或密码错误")#用户名密码错误
+#     import datetime
+#     content["username"] = form.username.data
+#     return render_template("login.html", form=form, current_time=datetime.datetime.utcnow())
+    # return render_template("newlogin.html", form=form, current_time=datetime.datetime.utcnow())
 
 @auth.route("/login",methods = ["GET","POST"])
 def login_menu():
     content = {
         "username": "",
-        "password": "",}
+        "password": "", }
     form = LoginForm()  # 创建表单对象
     if form.validate_on_submit():  # 如果表单提交
-        user = User.objects(email = form.username.data).first()#从数据库获取相应用户信息
-        if user is not None and user.verify_password(form.password.data):#验证密码
-            login_user(user,form.remember_me.data)#登陆用户
-            return redirect(request.args.get("next") or url_for("main.index"))#重定向链接
-        flash("用户名或密码错误")#用户名密码错误
+        user = User.objects(email=form.username.data).first()  # 从数据库获取相应用户信息
+        if user is not None and user.verify_password(form.password.data):  # 验证密码
+            # login_user(user, form.remember_me.data)  # 登陆用户
+            login_user(user)  # 登陆用户
+            return redirect(request.args.get("next") or url_for("main.index"))  # 重定向链接
+        flash("用户名或密码错误")  # 用户名密码错误
     import datetime
     content["username"] = form.username.data
-    return render_template("login.html", form=form, current_time=datetime.datetime.utcnow())
+    return render_template("newlogin.html",form=form, current_time=datetime.datetime.utcnow())
 
 @auth.route('/logout')
 @login_required

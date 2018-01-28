@@ -29,7 +29,7 @@ class User(UserMixin,db.Document):
         return True
 
     def is_active(self):
-        return False
+        return self.confirmed
 
     def is_anonymous(self):
         return False
