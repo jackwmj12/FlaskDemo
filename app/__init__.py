@@ -12,6 +12,12 @@ moment = Moment()
 login_manager = LoginManager()                  # 创建登陆管理
 login_manager.session_protection = "strong"     # 设定保护等级
 login_manager.login_view = "auth.login_menu"    # 添加登陆界面，放在view层
+login_manager.login_message = "请先登陆您的帐号"
+# login_manager.refresh_view = "accounts.reauthenticate"
+# login_manager.needs_refresh_message = (
+#     u"To protect your account, please reauthenticate to access this page."
+# )
+# login_manager.needs_refresh_message_category = "info"
 db = MongoEngine()
 
 def create_app(config_name):#创建APP
@@ -28,4 +34,5 @@ def create_app(config_name):#创建APP
     app.register_blueprint(main_blueprint)       # 初始化蓝图
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint,url_prefix = "/auth")
+    # print(app.config["Login_Message"])
     return app

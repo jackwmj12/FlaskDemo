@@ -25,3 +25,11 @@ class RegistrationForm(FlaskForm):
     def validate_username(self,field):
         if User.objects(username = field.data).first():
             raise ValidationError("该用户名已被注册!!!")
+
+class changePasswordForm(FlaskForm):
+    # username = StringField("用户   名:", validators=[Required(), length(1, 64)])
+    # Regexp("^[A-Za-z][A-Za-z-9_.]*$"), 0, "用户名只能包含字幕，数字，下划线，和点号"]
+    oldpassword = PasswordField("输入原密码:", validators=[Required()])
+    newpassword = PasswordField("输入新密码:", validators=[Required(),EqualTo("newpassword2", message="两次密码输入不相同")])
+    newpassword2 = PasswordField("输入新密码:", validators=[Required()])
+    submit_change = SubmitField("确定")
